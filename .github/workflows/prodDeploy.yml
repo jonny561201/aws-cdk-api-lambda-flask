@@ -1,0 +1,31 @@
+name: prod.deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+
+      - name: Setup Node.js 10
+        uses: actions/setup-node@v1
+        with:
+          node-version: "10.14.1"
+
+      - name: Install Python Dependencies
+        run: |
+          if [ -f requirements.txt ]; then pip install -Ur requirements.txt; fi
+          if [ -f requirements.txt ]; then pip install --target="./application" -Ur requirements.txt; fi
+          if [ -f test_requirements.txt ]; then pip install -Ur test_requirements.txt; fi
+          if [ -f infra_requirements.txt ]; then pip install -Ur infra_requirements.txt; fi
