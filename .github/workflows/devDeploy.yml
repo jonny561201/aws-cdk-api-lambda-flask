@@ -1,7 +1,9 @@
-name: prod.deploy
+name: dev.deploy
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -38,7 +40,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'
 
-      - name: Deploying PROD Infrastructure
+      - name: Deploying DEV Infrastructure
         run: cdk deploy --require-approval never prod-aws-cdk-api-lambda-flask
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
