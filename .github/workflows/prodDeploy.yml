@@ -3,6 +3,12 @@ name: prod.deploy
 on:
   workflow_dispatch:
 
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: 'us-east-1'
+
+
 jobs:
   build:
 
@@ -33,14 +39,6 @@ jobs:
 
       - name: Bootstrapping AWS
         run: cdk bootstrap aws://${{ secrets.PROD_ACCOUNT_NUMBER}}/$AWS_REGION
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-east-1'
 
       - name: Deploying PROD Infrastructure
         run: cdk deploy --require-approval never prod-aws-cdk-api-lambda-flask
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-east-1'
